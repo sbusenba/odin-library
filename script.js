@@ -40,6 +40,7 @@ function getBookFromUser(){
 
 function updateLibrary(){
     libraryContainer.innerHTML=''
+    if(myLibrary != null ){
     myLibrary.forEach((book,index) =>{ 
 
         let bookDiv  = document.createElement('div')
@@ -67,7 +68,7 @@ function updateLibrary(){
         bookDiv.appendChild(readButton)
         bookDiv.appendChild(removeButton)
         libraryContainer.appendChild(bookDiv)
-    })  
+    }) } 
 
 window.localStorage.setItem('library',JSON.stringify(myLibrary))
 console.table(window.localStorage.getItem('library'))
@@ -75,8 +76,9 @@ console.table(window.localStorage.getItem('library'))
 
 let libraryContainer = document.querySelector(".content")
 let storedLibrary = window.localStorage.getItem('library')
-myLibrary = JSON.parse(storedLibrary)
-
+if (storedLibrary!= null){
+    myLibrary = JSON.parse(storedLibrary)
+}
 document.querySelector(".addBook").addEventListener('click',getBookFromUser)
 
 updateLibrary()
