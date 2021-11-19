@@ -12,6 +12,7 @@ function Book(title,author,pages,read){
 function addBookToLibrary (book){
     book['data-index'] = myLibrary.length
     myLibrary.push(book)
+    updateLibrary()
 }
 function removeBook (){
     myLibrary.splice( this.parentNode.getAttribute('data-key') ,1)
@@ -53,9 +54,10 @@ function updateLibrary(){
         titleDiv.innerText = book.title
         authorDiv.innerText = book.author
         pagesDiv.innerText = book.pages
-        readButton.innerText = Boolean(book.read) ? 'read':'unread'
-        console.log(book.read)
-        console.log(Boolean(book.read) ? 'read':'unread')
+        if (book.read ===true){
+            readButton.innerText = 'read'
+        }else{
+            readButton.innerText= 'unread'}
         readButton.addEventListener('click',toggleRead)
         removeButton.innerText = "remove"
         removeButton.addEventListener('click',removeBook)
@@ -71,8 +73,8 @@ window.localStorage.setItem('library',JSON.stringify(myLibrary))
 console.table(window.localStorage.getItem('library'))
 }
 
-libraryContainer = document.querySelector(".content")
-storedLibrary = window.localStorage.getItem('library')
+let libraryContainer = document.querySelector(".content")
+let storedLibrary = window.localStorage.getItem('library')
 myLibrary = JSON.parse(storedLibrary)
 
 document.querySelector(".addBook").addEventListener('click',getBookFromUser)

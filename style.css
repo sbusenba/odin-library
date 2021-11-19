@@ -4,9 +4,12 @@
 }
 .header{
     flex:0;
+    display:flex;
+    flex-direction:row;
+    justify-content:space-between;
     height:70px;
-    background-color: #28287e;
-    color:aliceblue;
+    background-color: #45d579;
+    color:rgb(0, 122, 228);
 }
 .content {
     flex:1;
@@ -19,16 +22,16 @@
 .footer{
     height:70px;
     flex:0;
-    background-color: #28287e;
-    color:aliceblue;
+    background-color: #45d579;
+    color:rgb(0, 122, 228);
     display:flex;
     align-items:flex-end;
 }
 .bookdiv{
-border-radius: 5px;
-
-padding:5px;
-background-color: aquamarine;
+    border-radius: 5px;
+    box-shadow:5px 5px #33ff99;
+    padding:5px;
+    background-color: aquamarine;
 }
 .titlediv{
     font-size:24px;
