@@ -1,14 +1,17 @@
 
 let myLibrary = []
-function Book(title,author,pages,read){
-  this.title= title
-  this.author=author
-  this.pages = pages
-  this.read = read
-  this.info = function(){
-    return (title+" by "+author +", " +pages +" pages"+ ((read)? " read": " unread" ))
+class Book{
+    constructor(title,author,pages,read){
+        this.title= title
+        this.author=author
+        this.pages = pages
+        this.read = read
     }
-}
+    info(){
+        return (title+" by "+author +", " +pages +" pages"+ ((read)? " read": " unread" ));
+    }
+}   
+
 function addBookToLibrary (book){
     book['data-index'] = myLibrary.length
     myLibrary.push(book)
@@ -28,11 +31,11 @@ function toggleRead(){
 updateLibrary()
 }
 function getBookFromUser(){
-    let book = new Book
-    book.title = prompt("title")
-    book.author = prompt("author")
-    book.pages = prompt("pages")
-    book.read = prompt("read")
+    let title = prompt("title")
+    let author = prompt("author")
+    let pages = prompt("pages")
+    let read = Boolean(prompt("read"))
+    let book = new Book(title,author,pages,read)
     addBookToLibrary(book)
     updateLibrary()
 }
@@ -55,6 +58,7 @@ function updateLibrary(){
         titleDiv.innerText = book.title
         authorDiv.innerText = book.author
         pagesDiv.innerText = book.pages
+        console.log(`${book.title} : ${book.read}`)
         if (book.read ===true){
             readButton.innerText = 'read'
         }else{
@@ -71,7 +75,7 @@ function updateLibrary(){
     }) } 
 
 window.localStorage.setItem('library',JSON.stringify(myLibrary))
-console.table(window.localStorage.getItem('library'))
+
 }
 
 let libraryContainer = document.querySelector(".content")
