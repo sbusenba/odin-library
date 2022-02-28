@@ -11,6 +11,11 @@ class Book{
         return (title+" by "+author +", " +pages +" pages"+ ((read)? " read": " unread" ));
     }
 }   
+function clearAll(){
+while (libraryContainer.firstChild){
+    libraryContainer.removeChild(libraryContainer.firstChild)
+}
+}
 
 function addBookToLibrary (book){
     book['data-index'] = myLibrary.length
@@ -31,18 +36,66 @@ function toggleRead(){
 updateLibrary()
 }
 function getBookFromUser(){
-    let title = prompt("title")
-    let author = prompt("author")
-    let pages = prompt("pages")
-    let read = Boolean(prompt("read"))
-    let book = new Book(title,author,pages,read)
-    addBookToLibrary(book)
-    updateLibrary()
+    clearAll()
+    let newBookDiv = document.createElement('form')
+    newBookDiv.setAttribute("novalidate","novalidate")
+    let titleLabel = document.createElement('label')
+    titleLabel.setAttribute("for", "title")
+    titleLabel.innerText = "Title:"
+    let titleInput = document.createElement('input')
+    titleInput.setAttribute("type","text")
+    titleInput.setAttribute("name","title")
+    titleInput.setAttribute("required","required")
+    titleInput.setAttribute("minlength","8")
+    
+    titleLabel.appendChild(titleInput)
+    newBookDiv.appendChild(titleLabel)
+    let authorLabel = document.createElement('label')
+    authorLabel.setAttribute("for","author")
+    authorLabel.innerText = "Author:"
+    let authorInput = document.createElement('input')
+    authorInput.setAttribute("type","text")
+    authorInput.setAttribute("name","author")
+    authorLabel.appendChild(authorInput)
+    newBookDiv.appendChild(authorLabel)
+    let pagesLabel = document.createElement('label')
+    pagesLabel.setAttribute("for","pages")
+    pagesLabel.innerText = "Pages:"
+    let pagesInput = document.createElement('input')
+    pagesInput.setAttribute("name", "pages")
+    pagesInput.setAttribute("type","text")
+    pagesLabel.appendChild(pagesInput)
+    newBookDiv.appendChild(pagesLabel)
+    let readLabel = document.createElement('label')
+    readLabel.setAttribute('for','read')
+    readLabel.innerText = "Read?"
+    let readInput = document.createElement('input')
+    readInput.setAttribute("name","read")
+    readInput.setAttribute("type","checkbox")
+    
+    readLabel.appendChild(readInput)
+    newBookDiv.appendChild(readLabel)
+    let submitButton = document.createElement('button')
+    submitButton.addEventListener('click',(event)=>{
+        console.log(titleInput.validity.valid)
+        if (titleInput.validity.valid){
+
+            let book = new Book(titleInput.value,authorInput.value,pagesInput.value,readInput.checked)
+            addBookToLibrary(book)
+            updateLibrary()
+        } else {
+            event.preventDefault()
+        }
+    });
+    submitButton.innerText="Add"
+    newBookDiv.appendChild(submitButton)
+    libraryContainer.appendChild(newBookDiv)
+
 }
 
 
 function updateLibrary(){
-    libraryContainer.innerHTML=''
+    clearAll();
     if(myLibrary != null ){
     myLibrary.forEach((book,index) =>{ 
 
@@ -65,7 +118,7 @@ function updateLibrary(){
             readButton.innerText= 'unread'}
         readButton.addEventListener('click',toggleRead)
         removeButton.innerText = "remove"
-        removeButton.addEventListener('click',removeBook)
+        removeButton.addEventListener('click',removeBook) 
         bookDiv.appendChild(titleDiv)
         bookDiv.appendChild(authorDiv)
         bookDiv.appendChild(pagesDiv)
