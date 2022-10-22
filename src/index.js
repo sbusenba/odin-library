@@ -1,8 +1,17 @@
+'use strict';
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-
+import { 
+    getFirestore,
+    collection,
+    addDoc,
+    query,
+    orderBy,
+    limit,
+    onSnapshot,
+  } from 'firebase/firestore';
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBR9cH8iFBbQ5dR-4zjfEjPbh5M_uMblQE",
@@ -28,9 +37,19 @@ class Book{
     }
 }   
 
-function addBookToLibrary (book){
-    book['data-index'] = myLibrary.length
-    myLibrary.push(book)
+async function addBookToLibrary (book){
+    try {
+        await addDoc(collection(getFirestore(), 'books'), {
+          title: book.title,
+          author: book.author,
+          pages: book.pages,
+          read: book.read
+        });
+      }
+      catch(error) {
+        console.error('Error writing new book to Firebase Database', error);
+      }
+
     updateLibrary()
 }
 function removeBook (){
@@ -101,17 +120,62 @@ function updateLibrary(){
         libraryContainer.appendChild(bookDiv)
     }) } 
 
-window.localStorage.setItem('library',JSON.stringify(myLibrary))
 
 }
+function displayBook(id,title,author,pages,read){
+    let bookDiv  = document.createElement('div')
+    bookDiv.setAttribute('data-key',id)
+    bookDiv.classList.add('bookdiv')
+    let titleDiv = document.createElement('div')
+    titleDiv.classList.add('titlediv')
+    let authorDiv = document.createElement('div')
+    let pagesDiv = document.createElement('div')
+    let readButton = document.createElement('button')
+    let removeButton = document.createElement('button')
+    titleDiv.innerText = title
+    authorDiv.innerText = author
+    pagesDiv.innerText = pages
+    readButton.checked = read
+    removeButton.addEventListener('click',()=>{
+        deleteBook(id)
+    })
+
+    
+}
+function deleteBook (id){
+
+    var div = document.querySelector("[data-key=id]");
+    // If an element for that message exists we delete it.
+    if (div) {
+        div.parentNode.removeChild(div);
+    }
+
+}
+
+function loadBooks(){
+    //create query, listens for new boosk
+    const newBookQuery= query(collection(getFirestore(),'books'),orderBy('title','desc'),limit(1000));
+      //start listening to query
+      onSnapshot(newBookQuery, function(snapshot) {
+        snapshot.docChanges().forEach(function(change) {
+          if (change.type === 'removed') {
+            deleteBook(change.doc.id);
+          } else {
+            var book = change.doc.data();
+            displayBook(change.doc.id, book.title, book.author,
+                          book.pages, book.read);
+          }
+        });
+      });
+
+
+}
+
 
 let libraryContainer = document.querySelector(".content")
-let storedLibrary = window.localStorage.getItem('library')
 let bookEntry = document.querySelector(".bookentry")
 console.log(bookEntry)
-if (storedLibrary!= null){
-    myLibrary = JSON.parse(storedLibrary)
-}
+loadBooks()
 document.querySelector(".addbook").addEventListener('click',()=>{bookEntry.classList.toggle('visible')})
 document.querySelector("#addbutton").addEventListener('click',getBookFromUser)
 updateLibrary()
