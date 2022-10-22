@@ -132,10 +132,15 @@ function displayBook(id,title,author,pages,read){
     authorDiv.innerText = author
     pagesDiv.innerText = pages
     readButton.checked = read
+    bookDiv.append(titleDiv)
+    bookDiv.append(authorDiv)
+    bookDiv.append(pagesDiv)
+    bookDiv.append(readButton)
+    bookDiv.append(removeButton)
     removeButton.addEventListener('click',()=>{
         deleteBook(id)
     })
-
+    libraryContainer.appendChild(bookDiv)
     
 }
 function deleteBook (id){
@@ -149,7 +154,7 @@ function deleteBook (id){
 }
 
 function loadBooks(){
-    //create query, listens for new boosk
+    //create query, listens for new books
     const newBookQuery= query(collection(getFirestore(),'books'),orderBy('title','desc'),limit(1000));
       //start listening to query
       onSnapshot(newBookQuery, function(snapshot) {
@@ -167,14 +172,17 @@ function loadBooks(){
 
 }
 
+function loadLibrary (){
+    query(collection(getFirestore(),'books'),orderBy('title','desc'),limit(1000)).forEach(
+        (book)=>{
+        console.log(book)
+    });
+}
 
 let libraryContainer = document.querySelector(".content")
 let bookEntry = document.querySelector(".bookentry")
 console.log(bookEntry)
-query(collection(getFirestore(),'books'),orderBy('title','desc'),limit(1000)).forEach(
-    (book)=>{
-    console.log(book)
-});
+
 
 loadBooks()
 document.querySelector(".addbook").addEventListener('click',()=>{bookEntry.classList.toggle('visible')})
