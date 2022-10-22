@@ -1,6 +1,11 @@
+* {
+    margin: 0;
+    padding: 0;
+} 
 .body {
     display:flex;
     flex-direction:column;
+    margin:0px;
 }
 .header{
     flex:0;
@@ -11,6 +16,7 @@
     height:70px;
     background-color: #45d579;
     color:rgb(0, 122, 228);
+    padding:1rem;
 }
 .content {
     flex:1;
@@ -19,6 +25,7 @@
     flex-wrap:wrap;
     gap:25px;
     padding:25px;
+    padding-bottom:70px;
 }
 .footer{
     height:70px;
@@ -28,15 +35,51 @@
     display:flex;
     align-items:flex-end;
     justify-content:flex-end;
+    position: fixed;
+    width:100%;
+    bottom:0px;
+    left:0px;
+    padding:0.25rem;
 
+}
+.footer p {
+    margin:1rem;
 }
 .bookdiv{
     border-radius: 5px;
     box-shadow:5px 5px #33ff99;
     padding:5px;
     background-color: aquamarine;
+    position:relative;
 }
 .titlediv{
     font-size:24px;
     font-weight:600;
+}
+.bookentry{
+    position: absolute;
+    right:0px;
+    display:none;
+    height: fit-content;
+    padding:1rem;
+    background-color: rgb(50, 138, 109);
+    z-index: 1;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items:flex-start;
+
+}
+.bookentry input{
+    right:0px;
+}
+label {
+    display:flex;
+    align-items: flex-end;
+    margin:0px;
+    width:auto;
+
+}
+.bookentry.visible {
+    display:flex;
+
 }
