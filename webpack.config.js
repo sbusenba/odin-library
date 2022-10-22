@@ -6,7 +6,7 @@ module.exports = {
   mode:'development',
   // The location of the build folder described above
   output: {
-    path: path.resolve(__dirname, 'public'),
+    path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
   },
   // Optional and for development only. This provides the ability to
