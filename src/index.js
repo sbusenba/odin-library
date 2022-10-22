@@ -50,11 +50,9 @@ async function addBookToLibrary (book){
         console.error('Error writing new book to Firebase Database', error);
       }
 
-    updateLibrary()
 }
 function removeBook (){
     myLibrary.splice( this.parentNode.getAttribute('data-key') ,1)
-    updateLibrary()
 
 }
 function toggleRead(){
@@ -63,7 +61,6 @@ function toggleRead(){
     } else{
         myLibrary[this.parentNode.getAttribute('data-key')].read = true
     }
-    updateLibrary()
 }
 function getBookFromUser(){
     let titleEntry = document.querySelector("#titleinput");
@@ -81,7 +78,6 @@ function getBookFromUser(){
     bookEntry.classList.toggle('visible')
     let book = new Book(title,author,pages,read)
     addBookToLibrary(book)
-    updateLibrary()
 }
 
 
@@ -175,8 +171,12 @@ function loadBooks(){
 let libraryContainer = document.querySelector(".content")
 let bookEntry = document.querySelector(".bookentry")
 console.log(bookEntry)
+query(collection(getFirestore(),'books'),orderBy('title','desc'),limit(1000)).forEach(
+    (book)=>{
+    console.log(book)
+});
+
 loadBooks()
 document.querySelector(".addbook").addEventListener('click',()=>{bookEntry.classList.toggle('visible')})
 document.querySelector("#addbutton").addEventListener('click',getBookFromUser)
-updateLibrary()
 
