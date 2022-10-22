@@ -28,13 +28,22 @@ function toggleRead(){
     } else{
         myLibrary[this.parentNode.getAttribute('data-key')].read = true
     }
-updateLibrary()
+    updateLibrary()
 }
 function getBookFromUser(){
-    let title = prompt("title")
-    let author = prompt("author")
-    let pages = prompt("pages")
-    let read = Boolean(prompt("read"))
+    let titleEntry = document.querySelector("#titleinput");
+    let title = titleEntry.value;
+    titleEntry.value = '';
+    let authorEntry = document.querySelector("#authorinput")
+    let author = authorEntry.value;
+    authorEntry.value = '';
+    let pagesEntry = document.querySelector("#pagesinput")
+    let pages = pagesEntry.value;
+    pagesEntry.value  = ''
+    let readEntry = document.querySelector("#readinput")
+    let read = readEntry.checked;
+    readEntry.checked = false;
+    bookEntry.classList.toggle('visible')
     let book = new Book(title,author,pages,read)
     addBookToLibrary(book)
     updateLibrary()
@@ -42,7 +51,9 @@ function getBookFromUser(){
 
 
 function updateLibrary(){
-    libraryContainer.innerHTML=''
+    while(libraryContainer.firstChild){
+       libraryContainer.firstChild.remove()
+    }
     if(myLibrary != null ){
     myLibrary.forEach((book,index) =>{ 
 
@@ -80,10 +91,12 @@ window.localStorage.setItem('library',JSON.stringify(myLibrary))
 
 let libraryContainer = document.querySelector(".content")
 let storedLibrary = window.localStorage.getItem('library')
+let bookEntry = document.querySelector(".bookentry")
+console.log(bookEntry)
 if (storedLibrary!= null){
     myLibrary = JSON.parse(storedLibrary)
 }
-document.querySelector(".addBook").addEventListener('click',getBookFromUser)
-
+document.querySelector(".addbook").addEventListener('click',()=>{bookEntry.classList.toggle('visible')})
+document.querySelector("#addbutton").addEventListener('click',getBookFromUser)
 updateLibrary()
 
